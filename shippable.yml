@@ -10,7 +10,7 @@ resources:
 # Azure credentials
   - name: azure_vm_tf_creds
     type: integration
-    integration: "drship_azure"
+    integration: "drship_azure_kv" # TODO: change name to drship_azure
 
 # Terraform State
   - name: azure_vm_tf_state
@@ -45,7 +45,7 @@ jobs:
                 - aws_key_name: "dr_us_east_1"
           script:
             - pushd $(shipctl get_resource_state "azure_vm_tf_repo")
-            # - export AZURE_SUBSCRIPTION_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "subscriptionid") # TODO: use subscription ID if needed
+            - export AZURE_SUBSCRIPTION_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "subscriptionid") # TODO: use subscription ID if needed
             - export AZURE_CLIENT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "appid")
             - export AZURE_CLIENT_SECRET=$(shipctl get_integration_resource_field azure_vm_tf_creds "password")
             - export AZURE_TENANT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "tenant")
