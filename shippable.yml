@@ -8,7 +8,7 @@ resources:
       branch: master
 
 # Azure credentials
-  - name: azure_vm_tf_creds
+  - name: azure_vm_tf_creds_1
     type: integration
     integration: "drship_azure"
 
@@ -33,7 +33,7 @@ jobs:
         switch: off
       - IN: azure_vm_tf_state
         switch: off
-      - IN: azure_vm_tf_creds
+      - IN: azure_vm_tf_creds_1
         switch: off
       - TASK:
           name: prov_vm
@@ -45,15 +45,15 @@ jobs:
                 - aws_key_name: "dr_us_east_1"
           script:
             - pushd $(shipctl get_resource_state "azure_vm_tf_repo")
-            - export AZURE_SUBSCRIPTION_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "subscriptionid") # TODO: use subscription ID if needed
-            - export AZURE_CLIENT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "appid")
-            - export AZURE_CLIENT_SECRET=$(shipctl get_integration_resource_field azure_vm_tf_creds "password")
-            - export AZURE_TENANT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "tenant")
+            - export AZURE_SUBSCRIPTION_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds_1 "subscriptionid") # TODO: use subscription ID if needed
+            - export AZURE_CLIENT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds_1 "appid")
+            - export AZURE_CLIENT_SECRET=$(shipctl get_integration_resource_field azure_vm_tf_creds_1 "password")
+            - export AZURE_TENANT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds_1 "tenant")
             - export l1=$(expr length "$AZURE_CLIENT_ID")
             - export l2=$(expr length "$AZURE_CLIENT_SECRET")
             - export l3=$(expr length "$AZURE_TENANT_ID")
             - export l4=$(expr length "$AZURE_SUBSCRIPTION_ID")
-            - echo "lens are $l1 $l2 $l3 l4 --"
+            - echo "lens are $l1 $l2 $l3 $l4 --"
             # - shipctl copy_file_from_resource_state azure_vm_tf_state terraform.tfstate .
             - shipctl replace terraform.tfvars
             - terraform plan -var-file=terraform.tfvars
