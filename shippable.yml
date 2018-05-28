@@ -11,17 +11,17 @@ resources:
   - name: azure_vm_tf_creds
     type: integration
     integration: "drship_azure"
-#
-# # Terraform State
-#   - name: azure_vm_tf_state
-#     type: state
-#
-# # Output of vm provisioning
-#   - name: azure_vm_tf_info
-#     type: params
-#     versionTemplate:
-#       params:
-#         SEED: "initial_version"
+
+# Terraform State
+  - name: azure_vm_tf_state
+    type: state
+
+# Output of vm provisioning
+  - name: azure_vm_tf_info
+    type: params
+    versionTemplate:
+      params:
+        SEED: "initial_version"
 
 # jobs:
 # Provision Azure VM with Terraform
