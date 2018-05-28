@@ -6,11 +6,11 @@ resources:
     versionTemplate:
       sourceName: "sample-organisation/prov_azure_vm_terraform" # TODO: change to org name to devops-recipies
       branch: master
-#
-# # Azure credentials
-#   - name: azure_vm_tf_creds
-#     type: integration
-#     integration: "drship_aws"
+
+# Azure credentials
+  - name: azure_vm_tf_creds
+    type: integration
+    integration: "drship_azure"
 #
 # # Terraform State
 #   - name: azure_vm_tf_state
