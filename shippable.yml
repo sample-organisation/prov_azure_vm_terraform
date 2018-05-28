@@ -10,7 +10,7 @@ resources:
 # Azure credentials
   - name: azure_vm_tf_creds
     type: integration
-    integration: "drship_azure_kv" # TODO: change name to drship_azure
+    integration: "drship_azure"
 
 # Terraform State
   - name: azure_vm_tf_state
@@ -49,7 +49,6 @@ jobs:
             - export AZURE_CLIENT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "appid")
             - export AZURE_CLIENT_SECRET=$(shipctl get_integration_resource_field azure_vm_tf_creds "password")
             - export AZURE_TENANT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "tenant")
-            - echo "AZURE_CLIENT_ID = $AZURE_CLIENT_ID"
             - export l1=$(expr length "$AZURE_CLIENT_ID")
             - export l2=$(expr length "$AZURE_CLIENT_SECRET")
             - export l3=$(expr length "$AZURE_TENANT_ID")
