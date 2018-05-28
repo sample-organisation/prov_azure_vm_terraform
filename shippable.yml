@@ -1,72 +1,72 @@
-resources:
+# resources:
 # Automation scripts repo
-  - name: azure_vm_tf_repo
-    type: gitRepo
-    integration: "drship_github"
-    versionTemplate:
-      sourceName: "devops-recipes/prov_azure_vm_terraform"
-      branch: master
+#   - name: azure_vm_tf_repo
+#     type: gitRepo
+#     integration: "drship_github"
+#     versionTemplate:
+#       sourceName: "sample-organisation/prov_azure_vm_terraform" # TODO: change to org name to devops-recipies
+#       branch: master
+#
+# # Azure credentials
+#   - name: azure_vm_tf_creds
+#     type: integration
+#     integration: "drship_aws"
+#
+# # Terraform State
+#   - name: azure_vm_tf_state
+#     type: state
+#
+# # Output of vm provisioning
+#   - name: azure_vm_tf_info
+#     type: params
+#     versionTemplate:
+#       params:
+#         SEED: "initial_version"
 
-# Azure credentials
-  - name: azure_vm_tf_creds
-    type: integration
-    integration: "drship_aws"
-
-# Terraform State
-  - name: azure_vm_tf_state
-    type: state
-
-# Output of vm provisioning
-  - name: azure_vm_tf_info
-    type: params
-    versionTemplate:
-      params:
-        SEED: "initial_version"
-
-jobs:
+# jobs:
 # Provision Azure VM with Terraform
-  - name: prov_azure_vm_tf
-    type: runSh
-    steps:
-      - IN: aws_vpc_tf_info # TODO see the link between vpc
-      - IN: azure_vm_tf_repo
-        switch: off
-      - IN: azure_vm_tf_state
-        switch: off
-      - IN: azure_vm_tf_creds
-        switch: off
-      - TASK:
-          name: prov_vm
-          runtime:
-            options:
-              env: # TODO: edit envs
-                - inst_type: "t2.micro"
-                - inst_ami: "ami-43a15f3e"
-                - aws_key_name: "dr_us_east_1"
-          script:
-            - pushd $(shipctl get_resource_state "azure_vm_tf_repo")
-            # - export AWS_ACCESS_KEY_ID=$(shipctl get_integration_resource_field aws_ec2_tf_creds "accessKey")
-            # - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_resource_field aws_ec2_tf_creds "secretKey")
-            - shipctl copy_file_from_resource_state azure_vm_tf_state terraform.tfstate .
-            - shipctl replace
-            terraform.tfvars
-            - terraform plan -var-file=terraform.tfvars
-            - terraform apply -var-file=terraform.tfvars
-      - OUT: azure_vm_tf_info
-        overwrite: true
-      - OUT: azure_vm_tf_state
-    on_success:
-      script:
-        - echo "TODO"
-        # - shipctl put_resource_state_multi aws_ec2_tf_info "versionName=$(terraform output ec2_ins_0_ip)" "ec2_ins_0_ip=$(terraform output ec2_ins_0_ip)"
-    always:
-      script:
-        - shipctl copy_file_to_resource_state terraform.tfstate azure_vm_tf_state
-        - popd
-    flags:
-      - azure_vm
-      - azure
-      - terraform
+  # - name: prov_azure_vm_tf
+  #   type: runSh
+  #   steps:
+  #     - IN: aws_vpc_tf_info # TODO see the link between vpc
+  #     - IN: azure_vm_tf_repo
+  #       switch: off
+  #     - IN: azure_vm_tf_state
+  #       switch: off
+  #     - IN: azure_vm_tf_creds
+  #       switch: off
+  #     - TASK:
+  #         name: prov_vm
+  #         runtime:
+  #           options:
+  #             env: # TODO: edit envs
+  #               - inst_type: "t2.micro"
+  #               - inst_ami: "ami-43a15f3e"
+  #               - aws_key_name: "dr_us_east_1"
+  #         script:
+  #           - pushd $(shipctl get_resource_state "azure_vm_tf_repo")
+  #           # - export AWS_ACCESS_KEY_ID=$(shipctl get_integration_resource_field aws_ec2_tf_creds "accessKey")
+  #           # - export AWS_SECRET_ACCESS_KEY=$(shipctl get_integration_resource_field aws_ec2_tf_creds "secretKey")
+  #           - shipctl copy_file_from_resource_state azure_vm_tf_state terraform.tfstate .
+  #           - shipctl replace
+  #           terraform.tfvars
+  #           - terraform plan -var-file=terraform.tfvars
+  #           - terraform apply -var-file=terraform.tfvars
+  #     - OUT: azure_vm_tf_info
+  #       overwrite: true
+  #     - OUT: azure_vm_tf_state
+  #   on_success:
+  #     script:
+  #       - echo "TODO"
+  #       # - shipctl put_resource_state_multi aws_ec2_tf_info "versionName=$(terraform output ec2_ins_0_ip)" "ec2_ins_0_ip=$(terraform output ec2_ins_0_ip)"
+  #   always:
+  #     script:
+  #       - shipctl copy_file_to_resource_state terraform.tfstate azure_vm_tf_state
+  #       - popd
+  #   flags:
+  #     - azure_vm
+  #     - azure
+  #     - terraform
 
 # De-provision AWS ec2 with Terraform
   # - name: deprov_aws_ec2_tf
