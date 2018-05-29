@@ -5,11 +5,41 @@ provider "azurerm" {
   tenant_id = "${var.azure_tenant_id}"
 }
 
-resource "azurerm_resource_group" "myterraformgroup" {
-    name     = "myResourceGroup"
-    location = "eastus"
+resource "azurerm_virtual_machine" "demo_vm_tf" {
+  name                  = "demo_vm_tf"
+  location              = "eastus"
+  resource_group_name   = "${var.resource_group_name}"
+  network_interface_ids = ["${var.nic_id}"]
+  vm_size               = "Standard_B1s"
 
-    tags {
-        environment = "Terraform Demo"
+  storage_os_disk {
+    name              = "demo_os_disk_tf"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Premium_LRS"
+  }
+
+  storage_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "16.04.0-LTS"
+    version   = "latest"
+  }
+
+  os_profile {
+    computer_name  = "demovm"
+    admin_username = "azureuser"
+  }
+
+  os_profile_linux_config {
+    disable_password_authentication = false # TODO: use ssh integration and set this to true
+    ssh_keys {
+        path     = "/home/azureuser/.ssh/authorized_keys"
+        key_data = "ssh-rsa AAAAB3Nz{snip}hwhqT9h" # TODO: use ssh integration in shippable to achieve this
     }
+  }
+
+  tags {
+      environment = "Terraform Demo"
+  }
 }

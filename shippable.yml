@@ -24,25 +24,11 @@ resources:
         SEED: "initial_version"
 
 jobs:
-  # - name: sample-job
-  #   type: runSh
-  #   steps:
-  #     - TASK:
-  #       name: print_env
-  #       # runtime:
-  #       #   options:
-  #       #     env: # TODO: edit envs
-  #       #       - inst_type: "t2.micro"
-  #       #       - inst_ami: "ami-43a15f3e"
-  #       #       - aws_key_name: "dr_us_east_1"
-  #       script:
-  #         - printenv
-
 # Provision Azure VM with Terraform
   - name: prov_azure_vm_tf
     type: runSh
     steps:
-      # - IN: aws_vpc_tf_info # TODO see the link between vpc
+      - IN: aws_vnet_tf_info
       - IN: azure_vm_tf_repo
         switch: off
       - IN: azure_vm_tf_state
@@ -59,18 +45,10 @@ jobs:
                 - aws_key_name: "dr_us_east_1"
           script:
             - pushd $(shipctl get_resource_state "azure_vm_tf_repo")
-            # - export AZURE_SUBSCRIPTION_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "subscriptionid") # TODO: use subscription ID if needed
-            # - export AZURE_CLIENT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "appid")
-            # - export AZURE_CLIENT_SECRET=$(shipctl get_integration_resource_field azure_vm_tf_creds "password")
-            # - export AZURE_TENANT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "tenant")
-            - export l1=$(expr length "$AZURE_CLIENT_ID")
-            - export l2=$(expr length "$AZURE_CLIENT_SECRET")
-            - export l3=$(expr length "$AZURE_TENANT_ID")
-            - export l4=$(expr length "$AZURE_SUBSCRIPTION_ID")
-            - export l5=$(expr length "$APPID")
-            - echo "lens are $l1 $l2 $l3 $l4 $l5 --"
-            # - shipctl copy_file_from_resource_state azure_vm_tf_state terraform.tfstate .
+            - shipctl copy_file_from_resource_state azure_vm_tf_state terraform.tfstate .
             - shipctl replace terraform.tfvars
+            - echo "resource_group_name = $resource_group_name"
+            - echo "nic_id = $nic_id"
             - terraform plan -var-file=terraform.tfvars
             # - terraform apply -var-file=terraform.tfvars
       - OUT: azure_vm_tf_info
@@ -82,7 +60,7 @@ jobs:
         # - shipctl put_resource_state_multi aws_ec2_tf_info "versionName=$(terraform output ec2_ins_0_ip)" "ec2_ins_0_ip=$(terraform output ec2_ins_0_ip)"
     always:
       script:
-        # - shipctl copy_file_to_resource_state terraform.tfstate azure_vm_tf_state
+        - shipctl copy_file_to_resource_state terraform.tfstate azure_vm_tf_state
         - popd
     flags:
       - azure_vm
