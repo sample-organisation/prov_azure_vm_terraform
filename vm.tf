@@ -13,10 +13,10 @@ resource "azurerm_virtual_machine" "demo_vm_tf" {
   vm_size               = "Standard_B1s"
 
   storage_os_disk {
-    name              = "demo_os_disk_tf"
+    name              = "osdisk1"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Premium_LRS"
+    managed_disk_type = "Standard_LRS"
   }
 
   storage_image_reference {
