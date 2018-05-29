@@ -8,7 +8,7 @@ resources:
       branch: master
 
 # Azure credentials
-  - name: azure_vm_tf_creds_1
+  - name: azure_vm_tf_creds
     type: integration
     integration: "drship_azure"
 
@@ -24,6 +24,20 @@ resources:
         SEED: "initial_version"
 
 jobs:
+  # - name: sample-job
+  #   type: runSh
+  #   steps:
+  #     - TASK:
+  #       name: print_env
+  #       # runtime:
+  #       #   options:
+  #       #     env: # TODO: edit envs
+  #       #       - inst_type: "t2.micro"
+  #       #       - inst_ami: "ami-43a15f3e"
+  #       #       - aws_key_name: "dr_us_east_1"
+  #       script:
+  #         - printenv
+
 # Provision Azure VM with Terraform
   - name: prov_azure_vm_tf
     type: runSh
@@ -33,7 +47,7 @@ jobs:
         switch: off
       - IN: azure_vm_tf_state
         switch: off
-      - IN: azure_vm_tf_creds_1
+      - IN: azure_vm_tf_creds
         switch: off
       - TASK:
           name: prov_vm
@@ -45,10 +59,10 @@ jobs:
                 - aws_key_name: "dr_us_east_1"
           script:
             - pushd $(shipctl get_resource_state "azure_vm_tf_repo")
-            - export AZURE_SUBSCRIPTION_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds_1 "subscriptionid") # TODO: use subscription ID if needed
-            - export AZURE_CLIENT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds_1 "appid")
-            - export AZURE_CLIENT_SECRET=$(shipctl get_integration_resource_field azure_vm_tf_creds_1 "password")
-            - export AZURE_TENANT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds_1 "tenant")
+            # - export AZURE_SUBSCRIPTION_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "subscriptionid") # TODO: use subscription ID if needed
+            # - export AZURE_CLIENT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "appid")
+            # - export AZURE_CLIENT_SECRET=$(shipctl get_integration_resource_field azure_vm_tf_creds "password")
+            # - export AZURE_TENANT_ID=$(shipctl get_integration_resource_field azure_vm_tf_creds "tenant")
             - export l1=$(expr length "$AZURE_CLIENT_ID")
             - export l2=$(expr length "$AZURE_CLIENT_SECRET")
             - export l3=$(expr length "$AZURE_TENANT_ID")
