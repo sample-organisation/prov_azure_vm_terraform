@@ -47,8 +47,6 @@ jobs:
             - pushd $(shipctl get_resource_state "azure_vm_tf_repo")
             - shipctl copy_file_from_resource_state azure_vm_tf_state terraform.tfstate .
             - shipctl replace terraform.tfvars
-            - echo "resource_group_name = $resource_group_name"
-            - echo "nic_id = $nic_id"
             - terraform plan -var-file=terraform.tfvars
             # - terraform apply -var-file=terraform.tfvars
       - OUT: azure_vm_tf_info

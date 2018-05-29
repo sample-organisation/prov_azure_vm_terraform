@@ -14,3 +14,11 @@ variable "azure_client_secret" {
 variable "azure_tenant_id" {
   description = "Azure Tenant ID"
 }
+
+variable "resource_group_name" {
+  description = "Resource Group Name"
+}
+
+variable "nic_id" {
+  decription = "Network Interface Card ID"
+}
