@@ -28,7 +28,7 @@ jobs:
   - name: prov_azure_vm_tf
     type: runSh
     steps:
-      - IN: aws_vnet_tf_info
+      - IN: azure_vnet_tf_info
       - IN: azure_vm_tf_repo
         switch: off
       - IN: azure_vm_tf_state
