@@ -20,5 +20,5 @@ variable "resource_group_name" {
 }
 
 variable "nic_id" {
-  decription = "Network Interface Card ID"
+  description = "Network Interface Card ID"
 }
