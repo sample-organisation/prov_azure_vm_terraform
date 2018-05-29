@@ -12,6 +12,11 @@ resources:
     type: integration
     integration: "drship_azure"
 
+# SSH key credentials
+  - name: azure_ssh_tf_creds
+    type: integration
+    integration: "drship_ssh"
+
 # Terraform State
   - name: azure_vm_tf_state
     type: state
@@ -35,6 +40,8 @@ jobs:
         switch: off
       - IN: azure_vm_tf_creds
         switch: off
+      - IN: azure_ssh_tf_creds
+        switch: off
       - TASK:
           name: prov_vm
           runtime:
@@ -45,6 +52,7 @@ jobs:
                 - aws_key_name: "dr_us_east_1"
           script:
             - pushd $(shipctl get_resource_state "azure_vm_tf_repo")
+            - export  ssh_public_key=$(shipctl get_integration_resource_field azure_ssh_tf_creds publicKey)
             - shipctl copy_file_from_resource_state azure_vm_tf_state terraform.tfstate .
             - shipctl replace terraform.tfvars
             - terraform plan -var-file=terraform.tfvars

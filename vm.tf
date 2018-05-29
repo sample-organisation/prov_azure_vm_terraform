@@ -32,10 +32,10 @@ resource "azurerm_virtual_machine" "demo_vm_tf" {
   }
 
   os_profile_linux_config {
-    disable_password_authentication = false # TODO: use ssh integration and set this to true
+    disable_password_authentication = true
     ssh_keys {
         path     = "/home/azureuser/.ssh/authorized_keys"
-        key_data = "ssh-rsa AAAAB3Nz{snip}hwhqT9h" # TODO: use ssh integration in shippable to achieve this
+        key_data = "${var.ssh_public_key}"
     }
   }
 

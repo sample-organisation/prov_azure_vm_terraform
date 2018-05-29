@@ -22,3 +22,7 @@ variable "resource_group_name" {
 variable "nic_id" {
   description = "Network Interface Card ID"
 }
+
+variable "ssh_public_key" {
+  description = "Public SSH key for accessing the machine"
+}
