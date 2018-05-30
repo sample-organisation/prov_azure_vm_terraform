@@ -55,7 +55,9 @@ jobs:
             - export  ssh_public_key=$(shipctl get_integration_resource_field azure_ssh_tf_creds publicKey)
             - shipctl copy_file_from_resource_state azure_vm_tf_state terraform.tfstate .
             - shipctl replace terraform.tfvars
+            - terraform --version
             - terraform init
+            - terraform --version
             - terraform plan -var-file=terraform.tfvars
             # - terraform apply -var-file=terraform.tfvars
       - OUT: azure_vm_tf_info
