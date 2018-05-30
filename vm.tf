@@ -75,5 +75,5 @@ resource "azurerm_virtual_machine" "demo_vm_tf" {
 }
 
 output "vm_id" {
-  value = "${azure_virtual_machine.demo_vm_tf.id}"
+  value = "${azurerm_virtual_machine.demo_vm_tf.id}"
 }
