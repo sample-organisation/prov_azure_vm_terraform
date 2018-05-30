@@ -73,3 +73,7 @@ resource "azurerm_virtual_machine" "demo_vm_tf" {
     environment = "Terraform Demo"
   }
 }
+
+output "vm_id" {
+  value = "${azure_virtual_machine.demo_vm_tf.id}"
+}

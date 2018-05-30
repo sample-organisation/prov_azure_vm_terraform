@@ -59,14 +59,14 @@ jobs:
             - terraform init
             - terraform --version
             - terraform plan -var-file=terraform.tfvars
-            # - terraform apply -var-file=terraform.tfvars
+            - terraform apply -var-file=terraform.tfvars
       - OUT: azure_vm_tf_info
         overwrite: true
       - OUT: azure_vm_tf_state
     on_success:
       script:
         - echo "TODO"
-        # - shipctl put_resource_state_multi aws_ec2_tf_info "versionName=$(terraform output ec2_ins_0_ip)" "ec2_ins_0_ip=$(terraform output ec2_ins_0_ip)"
+        - shipctl put_resource_state_multi azure_vm_tf_info "versionName=$(terraform output vm_id)" "vm_id=$(terraform output vm_id)"
     always:
       script:
         - shipctl copy_file_to_resource_state terraform.tfstate azure_vm_tf_state
