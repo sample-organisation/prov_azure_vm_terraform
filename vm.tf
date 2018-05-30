@@ -29,7 +29,6 @@ resource "azurerm_virtual_machine" "demo_vm_tf" {
     name              = "myosdisk1"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
   }
 
   os_profile {
