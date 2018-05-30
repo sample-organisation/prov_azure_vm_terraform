@@ -5,6 +5,25 @@ provider "azurerm" {
   tenant_id = "${var.azure_tenant_id}"
 }
 
+resource "azurerm_storage_account" "demo_storage_account_tf" {
+  name                     = "demo_storage_account_tf"
+  resource_group_name      = "${var.resource_group_name}"
+  location                 = "eastus"
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  tags {
+    environment = "Terraform Demo"
+  }
+}
+
+resource "azurerm_storage_container" "demo_storage_container_tf" {
+  name                  = "vhds"
+  resource_group_name   = "${var.resource_group_name}"
+  storage_account_name  = "${azurerm_storage_account.demo_storage_account_tf.name}"
+  container_access_type = "private"
+}
+
 resource "azurerm_virtual_machine" "demo_vm_tf" {
   name                  = "demo_vm_tf"
   location              = "eastus"
@@ -26,9 +45,18 @@ resource "azurerm_virtual_machine" "demo_vm_tf" {
   }
 
   storage_os_disk {
-    name              = "myosdisk1"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
+    name          = "myosdisk1"
+    vhd_uri       = "${azurerm_storage_account.demo_storage_account_tf.primary_blob_endpoint}${azurerm_storage_container.demo_storage_container_tf.name}/myosdisk1.vhd"
+    caching       = "ReadWrite"
+    create_option = "FromImage"
+  }
+
+  storage_data_disk {
+    name          = "datadisk0"
+    vhd_uri       = "${azurerm_storage_account.demo_storage_account_tf.primary_blob_endpoint}${azurerm_storage_container.demo_storage_container_tf.name}/datadisk0.vhd"
+    disk_size_gb  = "1023"
+    create_option = "Empty"
+    lun           = 0
   }
 
   os_profile {
