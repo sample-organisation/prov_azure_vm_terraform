@@ -6,7 +6,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_storage_account" "demo_storage_account_tf" {
-  name                     = "demo_storage_account_tf"
+  name                     = "demostorageaccounttf"
   resource_group_name      = "${var.resource_group_name}"
   location                 = "eastus"
   account_tier             = "Standard"
@@ -62,7 +62,7 @@ resource "azurerm_virtual_machine" "demo_vm_tf" {
   os_profile {
     computer_name  = "hostname"
     admin_username = "testadmin"
-    admin_password = "thisis!ag00dpassword"
+    admin_password = "Thisis!ag00dpassword"
   }
 
   os_profile_linux_config {
