@@ -59,7 +59,7 @@ jobs:
             - terraform init
             - terraform --version
             - terraform plan -var-file=terraform.tfvars
-            - terraform apply -var-file=terraform.tfvars
+            - terraform apply -auto-approve -var-file=terraform.tfvars
       - OUT: azure_vm_tf_info
         overwrite: true
       - OUT: azure_vm_tf_state
