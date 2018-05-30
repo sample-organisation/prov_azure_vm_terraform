@@ -32,15 +32,6 @@ resource "azurerm_virtual_machine" "demo_vm_tf" {
     managed_disk_type = "Standard_LRS"
   }
 
-  # Optional data disks
-  storage_data_disk {
-    name              = "datadisk_new"
-    managed_disk_type = "Standard_LRS"
-    create_option     = "Empty"
-    lun               = 0
-    disk_size_gb      = "80"
-  }
-
   os_profile {
     computer_name  = "hostname"
     admin_username = "testadmin"
