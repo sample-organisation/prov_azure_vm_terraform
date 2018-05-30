@@ -60,13 +60,16 @@ resource "azurerm_virtual_machine" "demo_vm_tf" {
   }
 
   os_profile {
-    computer_name  = "hostname"
-    admin_username = "testadmin"
-    admin_password = "Thisis!ag00dpassword"
+      computer_name  = "demovm"
+      admin_username = "azureuser"
   }
 
   os_profile_linux_config {
-    disable_password_authentication = false
+      disable_password_authentication = true
+      ssh_keys {
+          path     = "/home/azureuser/.ssh/authorized_keys"
+          key_data = "${var.ssh_public_key}"
+      }
   }
 
   tags {
